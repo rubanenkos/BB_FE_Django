@@ -1,19 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import requests
 
 # Create your views here.
 def index(request): 
-    # return HttpResponse("<h4>Hello, world. You're at the main index.</h4>")
     return render(request, 'main/index.html')
 
 def about(request): 
-    # return HttpResponse("<h4>You're at the main about.</h4>")
     return render(request, 'main/about.html')
 
-def users(request): 
-    # return HttpResponse("<h4>You're at the main about.</h4>")
-    return render(request, 'main/users.html')
+def users(request):
+    response = requests.get('http://127.0.0.1:5000/donors')
+    donors = response.json()
+    return render(request, 'main/users.html', {'donors': donors})
 
 def contacts(request): 
-    # return HttpResponse("<h4>You're at the main about.</h4>")
     return render(request, 'main/contacts.html')
