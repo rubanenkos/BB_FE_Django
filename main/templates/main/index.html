@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-</head>
-<body>  
-    <h1>Main page</h1>
-    <p>Main page</p>
-    
-</body>
-</html>
+{% extends 'main/layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Home page</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea eos, facilis quam odit iusto provident hic deserunt officia aliquam non nesciunt repellat fugiat sequi? Autem voluptatibus quam voluptatem amet reprehenderit?</p>
+        <button class="btn btn-warning">Button</button>
+{% endblock %}  
