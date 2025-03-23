@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv_win/
+build/
+dist/
+develop-eggs/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.txt
+*.pth
+
+# Django specific
+*.log
+*.pot
+*.sqlite3
+*.sqlite3-journal
+local_settings.py
+db.sqlite3
+media/
+static/
+.DS_Store
+
+# Environments
+.env
+.venv
+
+# OS generated files #
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+[Oo]utput/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Other
+*.orig
+*.rej
+~$*
+*.bak
+
+# Coverage data
+.coverage
+*.coverage
+*.lcov
+*.lcov.info
+
+# Environments (for different OS)
+.venv_linux/
+.venv_mac/
+
+# Static files collected from all apps
+staticfiles/
