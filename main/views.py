@@ -9,3 +9,11 @@ def index(request):
 def about(request): 
     # return HttpResponse("<h4>You're at the main about.</h4>")
     return render(request, 'main/about.html')
+
+def users(request): 
+    # return HttpResponse("<h4>You're at the main about.</h4>")
+    return render(request, 'main/users.html')
+
+def contacts(request): 
+    # return HttpResponse("<h4>You're at the main about.</h4>")
+    return render(request, 'main/contacts.html')
