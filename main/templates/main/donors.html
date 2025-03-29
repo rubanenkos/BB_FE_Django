@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Donors List</h1>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Blood Group</th>
+                        <th>Rhesus Factor</th>
+                        <th>Sex</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.user_name }}</td>
+                        <td>{{ donor.age }}</td>
+                        <td>{{ donor.blood_group }}</td>
+                        <td>{{ donor.rhesus_factor|stringformat:"s"|cut:" " }}</td>
+                        <td>{{ donor.sex|stringformat:"s"|cut:" " }}</td>
+                        <td>{{ donor.contact_number|stringformat:"s"|cut:" " }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

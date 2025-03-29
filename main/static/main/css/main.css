@@ -1,22 +1,23 @@
 body {
+    display: flex;
+    margin: 0;
+    min-height: 100vh;
     background: #f8fcee;
 }
+
 aside {
-    float: left;
-    background: #f8fcee;
+    width: 280px;
+    background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin: 20px;
-    margin-top: 10px;
-    margin-left: 30px;
-    border-radius: 10px;
-    height: 94vh;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 aside img {
     width: 80px; 
     height: auto; 
-    /*   margin: 10px;  */
     float: left;
 }
 
@@ -30,19 +31,21 @@ aside .logo {
     margin-left: 10px;
     color: #d32026;
     position: relative;
-    top: 5px
+    top: 5px;
 }
 
 aside h3 {
-    
+    clear: both;
     font-size: 20px;
     font-weight: bold;
+    margin-top: 30px;
     margin-bottom: 20px;
 }
 
 aside nav ul {
     list-style: none;
-    padding: 50;
+    padding: 0;
+    margin: 0;
 }
 
 aside nav ul li {
@@ -67,16 +70,18 @@ aside ul li a:hover {
 }
 
 main {
-    margin: 20px;
+    flex: 1;
+    margin-left: 280px;
     padding: 20px;
     background: #f8fcee;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    min-height: 96vh;
+    min-height: 100vh;
 }
 
 .features {
+    background: #ffffff;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .table {
@@ -99,7 +104,7 @@ main {
 }
 
 .login-box {
-    background: f8fcee;
+    background: #ffffff;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -121,9 +126,33 @@ main {
 .btn-danger {
     background-color: #e92d0c;
     border-color: #e92d0c;
+    color: white;
 }
 
 .btn-danger:hover {
     background-color: #d42a0b;
     border-color: #d42a0b;
+    color: white;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.header-container h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.75rem;
+}
+
+.add-user-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-left: auto;
 }

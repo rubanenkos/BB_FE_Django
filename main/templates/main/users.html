@@ -4,28 +4,27 @@
 
 {% block content %}
     <div class="features">
-        <h1>Donors List</h1>
+        <div class="header-container">
+            <h1>Users List</h1>
+            <button class="btn btn-danger add-user-btn">Add new user</button>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Name</th>
-                        <th>Age</th>
-                        <th>Blood Group</th>
-                        <th>Rhesus Factor</th>
-                        <th>Sex</th>
-                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Role</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for donor in donors %}
+                    {% for user in users %}
                     <tr>
-                        <td>{{ donor.user_name }}</td>
-                        <td>{{ donor.age }}</td>
-                        <td>{{ donor.blood_group }}</td>
-                        <td>{{ donor.rhesus_factor|stringformat:"s"|cut:" " }}</td>
-                        <td>{{ donor.sex|stringformat:"s"|cut:" " }}</td>
-                        <td>{{ donor.contact_number|stringformat:"s"|cut:" " }}</td>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role_name }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

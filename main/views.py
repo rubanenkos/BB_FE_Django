@@ -12,9 +12,14 @@ def about(request):
     return render(request, 'main/about.html')
 
 def users(request):
+    response = requests.get(f'{settings.BACKEND_API_URL}/users')
+    users = response.json()
+    return render(request, 'main/users.html', {'users': users})
+
+def donors(request):
     response = requests.get(f'{settings.BACKEND_API_URL}/donors')
     donors = response.json()
-    return render(request, 'main/users.html', {'donors': donors})
+    return render(request, 'main/donors.html', {'donors': donors})
 
 def contacts(request): 
     return render(request, 'main/contacts.html')
