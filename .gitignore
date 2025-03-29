@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__/
+*/**/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -70,3 +71,4 @@ ehthumbs.db
 
 # Static files collected from all apps
 staticfiles/
+bloodhub/__pycache__/settings.cpython-312.pyc

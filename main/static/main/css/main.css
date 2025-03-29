@@ -7,14 +7,16 @@ aside {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 20px;
+    margin-top: 10px;
+    margin-left: 30px;
     border-radius: 10px;
-    height: 96vh;
+    height: 94vh;
 }
 
 aside img {
     width: 80px; 
     height: auto; 
-    /* margin: 10px;  */
+    /*   margin: 10px;  */
     float: left;
 }
 
@@ -86,4 +88,42 @@ main {
 .table thead {
     background-color: #e92d0c;
     color: white;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8fcee;
+}
+
+.login-box {
+    background: f8fcee;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-logo {
+    width: 80px;
+    height: auto;
+    display: block;
+    margin: 0 auto 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn-danger {
+    background-color: #e92d0c;
+    border-color: #e92d0c;
+}
+
+.btn-danger:hover {
+    background-color: #d42a0b;
+    border-color: #d42a0b;
 }
