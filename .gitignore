@@ -69,6 +69,3 @@ ehthumbs.db
 .venv_linux/
 .venv_mac/
 
-# Static files collected from all apps
-staticfiles/
-bloodhub/__pycache__/settings.cpython-312.pyc
