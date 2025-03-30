@@ -1,0 +1,82 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    <div class="features">
+        // ...existing header and table code...
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="userName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="userEmail" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="createUserBtn">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update button to open modal
+    const addUserBtn = document.querySelector('.add-user-btn');
+    addUserBtn.setAttribute('data-bs-toggle', 'modal');
+    addUserBtn.setAttribute('data-bs-target', '#addUserModal');
+
+    // Handle form submission
+    document.getElementById('createUserBtn').addEventListener('click', async function() {
+        const name = document.getElementById('userName').value;
+        const email = document.getElementById('userEmail').value;
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/register', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: email,  // Using email as password
+                    role_id: 5
+                })
+            });
+
+            if (response.ok) {
+                // Close modal and refresh page
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error creating user');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error creating user');
+        }
+    });
+});
+</script>
+{% endblock %}

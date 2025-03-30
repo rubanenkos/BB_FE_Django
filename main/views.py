@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.conf import settings
 import requests
 import json
+from django.contrib import messages
 
 # Create your views here.
 def index(request): 
@@ -12,9 +13,19 @@ def about(request):
     return render(request, 'main/about.html')
 
 def users(request):
-    response = requests.get(f'{settings.BACKEND_API_URL}/users')
-    users = response.json()
-    return render(request, 'main/users.html', {'users': users})
+    # Fetch users
+    users_response = requests.get(f'{settings.BACKEND_API_URL}/users')
+    users = users_response.json()
+    
+    # Fetch roles
+    roles_response = requests.get(f'{settings.BACKEND_API_URL}/roles')
+    roles = roles_response.json()
+    
+    print("Roles:", roles)  # Debug print to verify roles data
+    return render(request, 'main/users.html', {
+        'users': users,
+        'roles': roles
+    })
 
 def donors(request):
     response = requests.get(f'{settings.BACKEND_API_URL}/donors')
@@ -78,3 +89,36 @@ def logout(request):
     if 'user' in request.session:
         del request.session['user']
     return redirect('login')
+
+def add_user(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        role_id = request.POST.get('role_id')
+        
+        data = {
+            "name": name,
+            "email": email,
+            "password": email,  # Using email as password
+            "role_id": int(role_id)  # Convert to integer
+        }
+        
+        try:
+            response = requests.post(
+                f'{settings.BACKEND_API_URL}/register',
+                headers={
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data=json.dumps(data)
+            )
+            
+            if response.status_code == 200:
+                messages.success(request, 'User created successfully')
+            else:
+                messages.error(request, 'Error creating user')
+                
+        except requests.exceptions.RequestException:
+            messages.error(request, 'Connection error')
+            
+    return redirect('users')
