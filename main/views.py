@@ -36,6 +36,7 @@ def login(request):
         }
         
         try:
+            # Login request
             response = requests.post(
                 f'{settings.BACKEND_API_URL}/login',
                 headers={'Content-Type': 'application/json'},
@@ -43,9 +44,24 @@ def login(request):
             )
             
             if response.status_code == 200:
-                return redirect('home')
-            else:
-                return render(request, 'main/login.html', {'error': 'Invalid credentials'})
+                # Get user details
+                user_response = requests.get(
+                    f'{settings.BACKEND_API_URL}/user/email',
+                    params={'email': email}
+                )
+                
+                if user_response.status_code == 200:
+                    user_data = user_response.json()
+                    # Store user data in session
+                    request.session['user'] = {
+                        'name': user_data['name'],
+                        'email': user_data['email'],
+                        'role_id': user_data['role_id'],
+                        'user_id': user_data['user_id']
+                    }
+                    return redirect('home')
+                    
+            return render(request, 'main/login.html', {'error': 'Invalid credentials'})
                 
         except requests.exceptions.RequestException as e:
             return render(request, 'main/login.html', {'error': 'Connection error'})
@@ -57,3 +73,8 @@ def register(request):
         # Add registration logic here
         return redirect('login')
     return render(request, 'main/register.html')
+
+def logout(request):
+    if 'user' in request.session:
+        del request.session['user']
+    return redirect('login')
