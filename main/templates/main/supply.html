@@ -17,6 +17,7 @@
                         <th>ID</th>
                         <th>Blood Donation Point</th>
                         <th>Date</th>
+                        <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 {% load l10n %}
@@ -26,9 +27,9 @@
                         <td>{{ supply.supply_id }}</td>
                         <td>{{ supply.blood_donation_center_name }}</td>
                         <td>{{ supply.supply_date|date:"d.m.Y" }}</td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm" style="background-color: #28a745; color: white;" data-bs-toggle="modal" data-bs-target="#detailsSupplyModal{{ supply.supply_id }}">
+                        <td class="text-end">
+                            <div class="btn-group gap-1">
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#detailsSupplyModal{{ supply.supply_id }}">
                                     <i class="fa-duotone fa-solid fa-plus"></i>
                                 </button>
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editSupplyModal{{ supply.supply_id }}">
