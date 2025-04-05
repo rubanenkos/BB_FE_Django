@@ -20,5 +20,6 @@ urlpatterns = [
     path('supply/', supply, name='supply'),
     path('add_supply/', add_supply, name='add_supply'),
     path('add_supply_details/<int:supply_id>/', add_supply_details, name='add_supply_details'),
+    # path('get_supply_details/<int:supply_id>/', get_supply_details, name='get_supply_details'),
 
 ]

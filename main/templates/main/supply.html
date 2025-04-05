@@ -137,5 +137,53 @@
         </div>
     </div>
 </div>
+
+
+<!-- Edit Supply Modal -->
+<div class="modal fade" id="editSupplyModal{{ supply.supply_id }}" tabindex="-1" aria-labelledby="editSupplyModalLabel{{ supply.supply_id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSupplyModalLabel{{ supply.supply_id }}">
+                    Supply Details #{{ supply.supply_id }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if supply.details %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Blood Group</th>
+                                    <th>Rhesus Factor</th>
+                                    <th>Creation Date</th>
+                                    <th>Expiry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in supply.details %}
+                                <tr>
+                                    <td>{{ detail.supply_details_id }}</td>
+                                    <td>{{ detail.blood_group }}</td>
+                                    <td>{{ detail.rhesus_factor|stringformat:"s"|slice:":1" }}</td>
+                                    <td>{{ detail.creation_date|date:"d.m.Y" }}</td>
+                                    <td>{{ detail.expiry_date|date:"d.m.Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>No details available for this supply.</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endfor %}
 {% endblock %}

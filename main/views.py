@@ -55,6 +55,22 @@ def supply(request):
                 if supply.get('supply_date'):
                     supply_date = parsedate_to_datetime(supply['supply_date'])
                     supply['supply_date'] = supply_date
+
+                # Fetch details for each supply
+                details_response = requests.get(
+                    f'{settings.BACKEND_API_URL}/supply-details/{supply["supply_id"]}'
+                )
+                if details_response.status_code == 200:
+                    details = details_response.json()
+                    # Convert dates in details
+                    for detail in details:
+                        if detail.get('creation_date'):
+                            detail['creation_date'] = parsedate_to_datetime(detail['creation_date'])
+                        if detail.get('expiry_date'):
+                            detail['expiry_date'] = parsedate_to_datetime(detail['expiry_date'])
+                    supply['details'] = details
+                else:
+                    supply['details'] = []    
         else:
             supplies = []
 
@@ -334,3 +350,4 @@ def add_supply_details(request, supply_id):
             messages.error(request, f'Connection error: {str(e)}')
 
     return redirect('supply')
+
