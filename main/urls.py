@@ -1,5 +1,5 @@
 from django.urls import  path
-from .views import index, about, login, users, contacts, register, donors, logout, add_user, add_donor
+from .views import add_supply, index, about, login, users, contacts, register, donors, logout, add_user, add_donor, supply
 
 urlpatterns = [
     path('', login, name='login'),
@@ -12,5 +12,8 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('add_user/', add_user, name='add_user'),
     path('add_donor/', add_donor, name='add_donor'),
+    path('supply/', supply, name='supply'),
+    path('add_supply/', add_supply, name='add_supply'),
+
 
 ]

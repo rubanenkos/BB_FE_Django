@@ -1,6 +1,8 @@
 import time
 import requests
 import json
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -42,6 +44,36 @@ def donors(request):
 
 def contacts(request): 
     return render(request, 'main/contacts.html')
+
+def supply(request):
+    try:
+        supplies_response = requests.get(f'{settings.BACKEND_API_URL}/supplies/2')
+        if supplies_response.status_code == 200:
+            supplies = supplies_response.json()
+            # Convert RFC 2822 dates to datetime objects
+            for supply in supplies:
+                if supply.get('supply_date'):
+                    supply_date = parsedate_to_datetime(supply['supply_date'])
+                    supply['supply_date'] = supply_date
+        else:
+            supplies = []
+
+        centers_response = requests.get(f'{settings.BACKEND_API_URL}/centers')
+        centers = centers_response.json() if centers_response.status_code == 200 else []
+        
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        return render(request, 'main/supply.html', {
+            'supplies': supplies,
+            'centers': centers,
+            'today': today
+        })
+    except requests.exceptions.RequestException:
+        messages.error(request, 'Error fetching data')
+        return render(request, 'main/supply.html', {
+            'supplies': [],
+            'centers': []
+        })
 
 def login(request):
     if request.method == 'POST':
@@ -97,6 +129,8 @@ def logout(request):
     if 'user' in request.session:
         del request.session['user']
     return redirect('login')
+def add_supply(request):
+    pass
 
 def add_user(request):
     if request.method == 'POST':
