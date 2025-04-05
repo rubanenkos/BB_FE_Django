@@ -1,7 +1,7 @@
 import time
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 
 from django.shortcuts import render, redirect
@@ -62,6 +62,7 @@ def supply(request):
         centers = centers_response.json() if centers_response.status_code == 200 else []
         
         today = datetime.now().strftime('%Y-%m-%d')
+        print(f"Today's date being passed to template: {today}")
         
         return render(request, 'main/supply.html', {
             'supplies': supplies,
@@ -129,8 +130,8 @@ def logout(request):
     if 'user' in request.session:
         del request.session['user']
     return redirect('login')
-def add_supply(request):
-    pass
+
+
 
 def add_user(request):
     if request.method == 'POST':
@@ -259,3 +260,77 @@ def add_donor(request):
             messages.error(request, f'Connection error: {str(e)}')
 
     return redirect('donors')
+
+def add_supply(request):
+    if request.method == 'POST':
+        blood_donation_center_id = request.POST.get('blood_donation_center_id')
+        supply_date = request.POST.get('supply_date')
+
+        data = {
+            "blood_bank_id": 2,  # Hardcoded for now
+            "blood_donation_center_id": int(blood_donation_center_id),
+            "supply_date": supply_date
+        }
+
+        try:
+            response = requests.post(
+                f'{settings.BACKEND_API_URL}/create-supply',
+                headers={'Content-Type': 'application/json'},
+                data=json.dumps(data)
+            )
+
+            if response.status_code == 200:
+                messages.success(request, 'Supply created successfully')
+            else:
+                messages.error(request, f'Error creating supply: {response.text}')
+
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f'Connection error: {str(e)}')
+
+    return redirect('supply')
+
+def add_supply_details(request, supply_id):
+    if request.method == 'POST':
+        blood_group = request.POST.get('blood_group')
+        rhesus_factor = request.POST.get('rhesus_factor')
+        creation_date = request.POST.get('creation_date')
+
+        # Map blood group and rhesus factor to blood_group_id
+        blood_group_mapping = {
+            'O+': 1, 'O-': 2,
+            'A+': 4, 'A-': 5,
+            'B+': 6, 'B-': 7,
+            'AB+': 8, 'AB-': 9
+        }
+
+        # Combine blood group and rhesus factor
+        blood_key = f"{blood_group}{'+' if rhesus_factor == 'positive' else '-'}"
+        blood_group_id = blood_group_mapping.get(blood_key)
+
+        # Calculate expiry date (2 months from creation date)
+        creation_date_obj = datetime.strptime(creation_date, '%Y-%m-%d')
+        expiry_date = creation_date_obj + timedelta(days=60)
+        
+        data = {
+            "supply_id": supply_id,
+            "blood_group_id": blood_group_id,
+            "creation_date": creation_date,
+            "expiry_date": expiry_date.strftime('%Y-%m-%d')
+        }
+
+        try:
+            response = requests.post(
+                f'{settings.BACKEND_API_URL}/create-supply-detail',
+                headers={'Content-Type': 'application/json'},
+                data=json.dumps(data)
+            )
+
+            if response.status_code == 200:
+                messages.success(request, 'Supply details added successfully')
+            else:
+                messages.error(request, f'Error adding supply details: {response.text}')
+
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f'Connection error: {str(e)}')
+
+    return redirect('supply')
