@@ -32,7 +32,10 @@
         {% if request.session.user %}
         <div class="user-info">
             <i class="fa-solid fa-user"></i>
-            <span>{{ request.session.user.name }}</span>
+            <div class="user-details">
+                <span class="user-name">{{ request.session.user.name }}</span>
+                <span class="user-role">{{ request.session.user.role_name }}</span>
+            </div>
         </div>
         {% endif %}
     </aside>

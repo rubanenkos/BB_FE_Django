@@ -269,3 +269,28 @@ main {
     font-size: 1.25rem;
     color: #666;
 }
+
+.user-info {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.user-info i {
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-role {
+    font-size: 0.8em;
+    color: #666;
+}

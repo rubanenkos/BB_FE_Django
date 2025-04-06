@@ -120,19 +120,31 @@ def login(request):
                 
                 if user_response.status_code == 200:
                     user_data = user_response.json()
-                    # Store user data in session
+                    
+                    # Fetch roles to get role name
+                    roles_response = requests.get(f'{settings.BACKEND_API_URL}/roles')
+                    if roles_response.status_code == 200:
+                        roles = roles_response.json()
+                        role_mapping = {role['role_id']: role['name'] for role in roles}
+                        role_name = role_mapping.get(user_data['role_id'], 'Unknown Role')
+                    else:
+                        role_name = 'Unknown Role'
+                    
+                    # Store user data in session with role name
                     request.session['user'] = {
                         'name': user_data['name'],
                         'email': user_data['email'],
                         'role_id': user_data['role_id'],
+                        'role_name': role_name,
                         'user_id': user_data['user_id']
                     }
                     return redirect('home')
-                    
-            return render(request, 'main/login.html', {'error': 'Invalid credentials'})
-                
+                else:
+                    messages.error(request, 'Error fetching user details')
+            else:
+                messages.error(request, 'Invalid login credentials')
         except requests.exceptions.RequestException as e:
-            return render(request, 'main/login.html', {'error': 'Connection error'})
+            messages.error(request, f'Connection error: {str(e)}')
             
     return render(request, 'main/login.html')
 
