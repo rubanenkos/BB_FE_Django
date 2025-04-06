@@ -59,54 +59,93 @@
         </div>
     </div>
 
-    <!-- Add Request Modal -->
-    <div class="modal fade" id="addRequestModal" tabindex="-1" aria-labelledby="addRequestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addRequestModalLabel">Add New Request</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="{% url 'add_request' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="requestDate" class="form-label">Request Date</label>
-                            <input type="date" 
-                                   class="form-control" 
-                                   name="request_date" 
-                                   required
-                                   max="{{ today }}"
-                                   value="{{ today }}"
-                                   id="requestDate">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Create</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% for request in requests %}
-    <!-- Details Request Modal -->
-    <div class="modal fade" id="detailsRequestModal{{ request.request_blood_id }}" tabindex="-1" aria-labelledby="detailsRequestModalLabel{{ request.request_blood_id }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailsRequestModalLabel{{ request.request_blood_id }}">
-                        Request Details #{{ request.request_blood_id }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Add form for request details here -->
+        <!-- Add Request Modal -->
+        <div class="modal fade" id="addRequestModal" tabindex="-1" aria-labelledby="addRequestModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addRequestModalLabel">Add New Request</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'add_request' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="requestDate" class="form-label">Request Date</label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       name="request_date" 
+                                       required
+                                       max="{{ today }}"
+                                       value="{{ today }}"
+                                       id="requestDate">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Create</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    
+        {% for request in requests %}
+        <!-- Details Request Modal -->
+        <div class="modal fade" id="detailsRequestModal{{ request.request_blood_id }}" tabindex="-1" aria-labelledby="detailsRequestModalLabel{{ request.request_blood_id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailsRequestModalLabel{{ request.request_blood_id }}">
+                            Request Details #{{ request.request_blood_id }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'add_request_details' request.request_blood_id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="bloodGroup" class="form-label">Blood Group</label>
+                                <select class="form-select" name="blood_group_id" required>
+                                    <option value="">Select blood group</option>
+                                    <option value="1">O+</option>
+                                    <option value="2">O-</option>
+                                    <option value="4">A+</option>
+                                    <option value="5">A-</option>
+                                    <option value="6">B+</option>
+                                    <option value="7">B-</option>
+                                    <option value="8">AB+</option>
+                                    <option value="9">AB-</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bloodPart" class="form-label">Blood Part</label>
+                                <select class="form-select" name="blood_part_id" required>
+                                    <option value="">Select blood part</option>
+                                    {% for part in blood_parts %}
+                                        <option value="{{ part.blood_part_id }}">{{ part.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" 
+                                    class="form-control" 
+                                    name="quantity" 
+                                    required
+                                    min="1"
+                                    value="1"
+                                    id="quantity">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <!-- View Request Modal -->
     <div class="modal fade" id="viewRequestModal{{ request.request_blood_id }}" tabindex="-1" aria-labelledby="viewRequestModalLabel{{ request.request_blood_id }}" aria-hidden="true">
@@ -138,6 +177,28 @@
                                 </td>
                             </tr>
                         </table>
+                
+                        {% if request.part_details %}
+                            <h6 class="mt-4">Requested Blood Parts:</h6>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Blood Part</th>
+                                        <th class="text-end">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for part in request.part_details %}
+                                    <tr>
+                                        <td>{{ part.blood_part_name }}</td>
+                                        <td class="text-end">{{ part.quantity }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="text-muted mt-3">No blood parts requested yet.</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="modal-footer">
