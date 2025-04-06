@@ -294,3 +294,16 @@ main {
     font-size: 0.8em;
     color: #666;
 }
+
+.messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    min-width: 300px;
+}
+
+.alert {
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}

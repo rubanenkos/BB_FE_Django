@@ -4,7 +4,7 @@ from .views import (
     add_supply, add_supply_details, add_user, add_donor,
     index, about, login, logout,
     users, contacts, register, donors,
-    supply
+    supply, process_supply
 )
 urlpatterns = [
     path('', login, name='login'),
@@ -20,6 +20,7 @@ urlpatterns = [
     path('supply/', supply, name='supply'),
     path('add_supply/', add_supply, name='add_supply'),
     path('add_supply_details/<int:supply_id>/', add_supply_details, name='add_supply_details'),
+     path('process_supply/<int:supply_id>/', process_supply, name='process_supply'),
     # path('get_supply_details/<int:supply_id>/', get_supply_details, name='get_supply_details'),
 
 ]

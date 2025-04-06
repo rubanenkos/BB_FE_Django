@@ -78,7 +78,6 @@ def supply(request):
         centers = centers_response.json() if centers_response.status_code == 200 else []
         
         today = datetime.now().strftime('%Y-%m-%d')
-        print(f"Today's date being passed to template: {today}")
         
         return render(request, 'main/supply.html', {
             'supplies': supplies,
@@ -111,7 +110,7 @@ def login(request):
                 data=json.dumps(data)
             )
             
-            if response.status_code == 200:
+            if response.status_code == 201:
                 # Get user details
                 user_response = requests.get(
                     f'{settings.BACKEND_API_URL}/user/email',
@@ -184,7 +183,7 @@ def add_user(request):
                 data=json.dumps(data)
             )
             
-            if response.status_code == 200:
+            if response.status_code == 201:
                 messages.success(request, 'User created successfully')
             else:
                 messages.error(request, 'Error creating user')
@@ -279,7 +278,7 @@ def add_donor(request):
                 data=json.dumps(donor_data)
             )
 
-            if donor_response.status_code == 200:
+            if donor_response.status_code == 201:
                 messages.success(request, 'Donor added successfully')
             else:
                 messages.error(request, f'Error creating donor: {donor_response.text}')
@@ -307,7 +306,7 @@ def add_supply(request):
                 data=json.dumps(data)
             )
 
-            if response.status_code == 200:
+            if response.status_code == 201:
                 messages.success(request, 'Supply created successfully')
             else:
                 messages.error(request, f'Error creating supply: {response.text}')
@@ -353,7 +352,7 @@ def add_supply_details(request, supply_id):
                 data=json.dumps(data)
             )
 
-            if response.status_code == 200:
+            if response.status_code == 201:
                 messages.success(request, 'Supply details added successfully')
             else:
                 messages.error(request, f'Error adding supply details: {response.text}')
@@ -363,3 +362,17 @@ def add_supply_details(request, supply_id):
 
     return redirect('supply')
 
+def process_supply(request, supply_id):
+    if request.method == 'POST':
+        try:
+            response = requests.get(f'{settings.BACKEND_API_URL}/process-supply/{supply_id}')
+            
+            if response.status_code == 200:
+                messages.success(request, 'Supply was successfully processed')
+            else:
+                messages.error(request, 'Error processing supply')
+                
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f'Connection error: {str(e)}')
+            
+    return redirect('supply')
