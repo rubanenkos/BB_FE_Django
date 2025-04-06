@@ -110,7 +110,7 @@ def login(request):
                 data=json.dumps(data)
             )
             
-            if response.status_code == 201:
+            if response.status_code == 200:
                 # Get user details
                 user_response = requests.get(
                     f'{settings.BACKEND_API_URL}/user/email',
@@ -376,3 +376,53 @@ def process_supply(request, supply_id):
             messages.error(request, f'Connection error: {str(e)}')
             
     return redirect('supply')
+
+def blood_requests(request):
+    try:
+        # Fetch requests
+        requests_response = requests.get(f'{settings.BACKEND_API_URL}/blood-requests-hospital/2')
+        if requests_response.status_code == 200:
+            blood_requests = requests_response.json()
+            # Convert date strings to datetime objects
+            for req in blood_requests:
+                if req.get('request_date'):
+                    req['request_date'] = datetime.strptime(req['request_date'], '%Y-%m-%d')
+        else:
+            blood_requests = []
+        
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        return render(request, 'main/requests.html', {
+            'requests': blood_requests,
+            'today': today
+        })
+    except requests.exceptions.RequestException:
+        messages.error(request, 'Error fetching data')
+        return render(request, 'main/requests.html', {
+            'requests': [],
+            'today': datetime.now().strftime('%Y-%m-%d')
+        })
+    
+def add_request(request):
+    if request.method == 'POST':
+        try:
+            data = {
+                "hospital_id": 2,  # Hardcoded for now
+                "request_date": request.POST.get('request_date')
+            }
+
+            response = requests.post(
+                f'{settings.BACKEND_API_URL}/create-blood-request',
+                headers={'Content-Type': 'application/json'},
+                data=json.dumps(data)
+            )
+
+            if response.status_code == 200:
+                messages.success(request, 'Request created successfully')
+            else:
+                messages.error(request, f'Error creating request: {response.text}')
+
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f'Connection error: {str(e)}')
+
+    return redirect('requests')

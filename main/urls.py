@@ -4,7 +4,8 @@ from .views import (
     add_supply, add_supply_details, add_user, add_donor,
     index, about, login, logout,
     users, contacts, register, donors,
-    supply, process_supply
+    supply, process_supply, blood_requests,
+    add_request
 )
 urlpatterns = [
     path('', login, name='login'),
@@ -14,13 +15,14 @@ urlpatterns = [
     path('users/', users, name='users'),
     path('donors/', donors, name='donors'),
     path('contacts/', contacts, name='contacts'),
+    path('requests/', blood_requests, name='requests'),
     path('logout/', logout, name='logout'),
     path('add_user/', add_user, name='add_user'),
     path('add_donor/', add_donor, name='add_donor'),
     path('supply/', supply, name='supply'),
     path('add_supply/', add_supply, name='add_supply'),
     path('add_supply_details/<int:supply_id>/', add_supply_details, name='add_supply_details'),
-     path('process_supply/<int:supply_id>/', process_supply, name='process_supply'),
-    # path('get_supply_details/<int:supply_id>/', get_supply_details, name='get_supply_details'),
+    path('process_supply/<int:supply_id>/', process_supply, name='process_supply'),
+    path('add_request/', add_request, name='add_request'),
 
 ]

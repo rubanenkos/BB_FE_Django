@@ -8,7 +8,7 @@ MENU_ITEMS = {
     ],
      2: [  # Hospital Coordinator role
         {'name': 'Home', 'url': 'home', 'icon': 'fa-solid fa-house'},
-        # {'name': 'Supply', 'url': 'supply', 'icon': 'fa-solid fa-droplet'},
+        {'name': 'Requests', 'url': 'requests', 'icon': 'fa-solid fa-hand-holding-droplet'},
         {'name': 'Contacts', 'url': 'contacts', 'icon': 'fa-solid fa-phone'},
         {'name': 'About', 'url': 'about', 'icon': 'fa-solid fa-envelope'},
         {'name': 'Logout', 'url': 'logout', 'icon': 'fa-solid fa-right-from-bracket'}
