@@ -119,6 +119,14 @@
                                 </select>
                             </div>
                             <div class="mb-3">
+                                <label for="rhFactor" class="form-label">Rhesus Factor</label>
+                                <select class="form-select" name="rhesus_factor" required>
+                                    <option value="">Select rhesus factor</option>
+                                    <option value="positive">Positive (+)</option>
+                                    <option value="negative">Negative (-)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="bloodPart" class="form-label">Blood Part</label>
                                 <select class="form-select" name="blood_part_id" required>
                                     <option value="">Select blood part</option>
@@ -179,26 +187,41 @@
                         </table>
                 
                         {% if request.part_details %}
-                            <h6 class="mt-4">Requested Blood Parts:</h6>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Blood Part</th>
-                                        <th class="text-end">Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for part in request.part_details %}
-                                    <tr>
-                                        <td>{{ part.blood_part_name }}</td>
-                                        <td class="text-end">{{ part.quantity }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <p class="text-muted mt-3">No blood parts requested yet.</p>
-                        {% endif %}
+    <h6 class="mt-4">Requested Blood Parts:</h6>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Blood Part</th>
+                <th>Blood Group</th>
+                <th class="text-end">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for part in request.part_details %}
+            <tr>
+                <td>{{ part.blood_part_name }}</td>
+                <td>
+                    {% with bg_id=part.blood_group_id %}
+                    {% if bg_id == 1 %}O+
+                    {% elif bg_id == 2 %}O-
+                    {% elif bg_id == 4 %}A+
+                    {% elif bg_id == 5 %}A-
+                    {% elif bg_id == 6 %}B+
+                    {% elif bg_id == 7 %}B-
+                    {% elif bg_id == 8 %}AB+
+                    {% elif bg_id == 9 %}AB-
+                    {% else %}Unknown
+                    {% endif %}
+                    {% endwith %}
+                </td>
+                <td class="text-end">{{ part.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-muted mt-3">No blood parts requested yet.</p>
+{% endif %}
                     </div>
                 </div>
                 <div class="modal-footer">
