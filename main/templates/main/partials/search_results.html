@@ -1,0 +1,75 @@
+{% if search_results %}
+    <div class="bank-info mb-4">
+        <h6>Blood Bank Information</h6>
+        <table class="table">
+            <tr>
+                <th>Bank Name:</th>
+                <td>{{ search_results.bank_name }}</td>
+            </tr>
+            <tr>
+                <th>Location:</th>
+                <td>{{ search_results.bank_location }}</td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>
+                    <span class="badge {% if search_results.status == 'complete' %}bg-success
+                        {% elif search_results.status == 'partial' %}bg-warning
+                        {% else %}bg-danger{% endif %}">
+                        {{ search_results.status|title }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Total Matched:</th>
+                <td>{{ search_results.total_matched }}</td>
+            </tr>
+        </table>
+    </div>
+
+    {% if search_results.matched_quantities %}
+        <h6 class="mt-4">Matched Blood Parts</h6>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Blood Part</th>
+                    <th>Blood Group</th>
+                    <th class="text-end">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for match in search_results.matched_quantities %}
+                <tr>
+                    <td>{{ match.blood_part_name }}</td>
+                    <td>{{ match.blood_group }}</td>
+                    <td class="text-end">{{ match.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if search_results.missing_quantities %}
+        <h6 class="mt-4 text-danger">Missing Blood Parts</h6>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Blood Part</th>
+                    <th>Blood Group</th>
+                    <th class="text-end">Missing Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for missing in search_results.missing_quantities %}
+                <tr>
+                    <td>{{ missing.blood_part_name }}</td>
+                    <td>{{ missing.blood_group }}</td>
+                    <td class="text-end">{{ missing.missing_quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% else %}
+    <div class="alert alert-warning">No search results available.</div>
+{% endif %}
