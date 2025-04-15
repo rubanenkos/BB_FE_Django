@@ -13,9 +13,16 @@
     {% block styles %}{% endblock %}
 </head>
 <body>  
+    
     <aside>
-        <img src="{% static 'main/img/blood-donation-app-logo.jpg' %}" alt="Logo">
-        <span class="logo">BloodHUB</span>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'main/img/bh2-logo.png' %}" alt="BloodHub Logo">
+
+                </a>
+            </div>
+        </nav>
         <p></p>
         <h3>Navigation</h3>
         <nav>

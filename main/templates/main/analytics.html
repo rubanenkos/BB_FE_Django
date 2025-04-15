@@ -1,0 +1,161 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="header-container">
+        <h1>Analytics</h1>
+    </div>
+
+    <!-- Analytics Navigation -->
+    <div class="analytics-nav mb-4">
+        <div class="nav nav-pills" id="analytics-tab" role="tablist">
+            <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                <i class="fa-solid fa-chart-pie me-2"></i>Overview
+            </button>
+            <button class="nav-link" id="requests-tab" data-bs-toggle="pill" data-bs-target="#requests" type="button" role="tab">
+                <i class="fa-solid fa-chart-line me-2"></i>Requests Analysis
+            </button>
+            <button class="nav-link" id="inventory-tab" data-bs-toggle="pill" data-bs-target="#inventory" type="button" role="tab">
+                <i class="fa-solid fa-chart-bar me-2"></i>Inventory Trends
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="analytics-content">
+        <!-- Overview Tab -->
+        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+            <div class="row g-4">
+                <!-- KPI Cards -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total Requests</h6>
+                            <h2 class="card-title">150</h2>
+                            <p class="card-text text-success">
+                                <i class="fa-solid fa-arrow-up"></i> 12% from last month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Fulfilled Requests</h6>
+                            <h2 class="card-title">85%</h2>
+                            <p class="card-text text-success">
+                                <i class="fa-solid fa-arrow-up"></i> 5% from last month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more KPI cards as needed -->
+            </div>
+
+            <!-- Charts Section -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Monthly Request Trends</h5>
+                            <div id="monthlyTrendsChart" style="height: 300px;">
+                                <!-- Chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Blood Type Distribution</h5>
+                            <div id="bloodTypeChart" style="height: 300px;">
+                                <!-- Chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Analysis Tab -->
+        <div class="tab-pane fade" id="requests" role="tabpanel">
+            <!-- Add request-specific analytics here -->
+        </div>
+
+        <!-- Inventory Trends Tab -->
+        <div class="tab-pane fade" id="inventory" role="tabpanel">
+            <!-- Add inventory-specific analytics here -->
+        </div>
+    </div>
+</div>
+
+<!-- Add Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Initialize charts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sample chart initialization
+    const monthlyTrendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    new Chart(monthlyTrendsCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Requests',
+                data: [65, 59, 80, 81, 56, 55],
+                borderColor: '#e92d0c',
+                tension: 0.1
+            }]
+        }
+    });
+
+    const bloodTypeCtx = document.getElementById('bloodTypeChart').getContext('2d');
+    new Chart(bloodTypeCtx, {
+        type: 'pie',
+        data: {
+            labels: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
+            datasets: [{
+                data: [45, 12, 25, 8, 15, 5, 3, 2],
+                backgroundColor: [
+                    '#e92d0c', '#ff6b6b', '#4ecdc4', '#45b7af',
+                    '#96ceb4', '#88b8a9', '#274c77', '#1a3557'
+                ]
+            }]
+        }
+    });
+});
+</script>
+
+<!-- Add custom styles -->
+<style>
+.analytics-nav {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+}
+
+.analytics-nav .nav-link {
+    color: #495057;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.analytics-nav .nav-link.active {
+    background-color: #e92d0c;
+    color: white;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

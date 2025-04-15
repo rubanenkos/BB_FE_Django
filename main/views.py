@@ -74,6 +74,9 @@ def deliveries(request):
 def contacts(request): 
     return render(request, 'main/contacts.html')
 
+def analytics(request):
+    return render(request, 'main/analytics.html')
+
 def supply(request):
     try:
         supplies_response = requests.get(f'{settings.BACKEND_API_URL}/supplies/2')

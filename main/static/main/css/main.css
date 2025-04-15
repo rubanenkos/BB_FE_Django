@@ -6,7 +6,7 @@ body {
 }
 
 aside {
-    width: 280px;
+    width: 260px;
     background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -39,29 +39,32 @@ aside h3 {
     font-size: 20px;
     font-weight: bold;
     margin-top: 30px;
-    margin-bottom: 20px;
+    padding-left: 25px;
+    margin-bottom: 15px;
 }
 
 aside nav ul {
+    padding-left: 25px;
     list-style: none;
-    padding: 0;
     margin: 0;
 }
 
 aside nav ul li {
-    margin: 20px 0;
+    margin-bottom: 12px;
 }
 
 aside nav ul li a {
-    display: flex;
-    align-items: center;
+    font-size: 1.1rem;
     text-decoration: none;
     color: inherit;
+    display: flex;
+    align-items: center;
     gap: 10px;
 }
 
 aside nav ul li a i {
     width: 20px;
+    text-align: center;
 }
 
 aside ul li a:hover {
@@ -71,7 +74,7 @@ aside ul li a:hover {
 
 main {
     flex: 1;
-    margin-left: 280px;
+    margin-left: 260px;
     padding: 20px;
     background: #f8fcee;
     min-height: 100vh;
@@ -336,4 +339,11 @@ main {
 
 .sortable.desc i::before {
     content: "\f0dd";  /* Font Awesome down arrow */
+}
+
+.navbar-brand img {
+    border-radius: 5%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
 }
