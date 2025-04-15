@@ -319,3 +319,21 @@ main {
         opacity: 1;
     }
 }
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable i {
+    margin-left: 5px;
+    color: #999;
+}
+
+.sortable.asc i::before {
+    content: "\f0de";  /* Font Awesome up arrow */
+}
+
+.sortable.desc i::before {
+    content: "\f0dd";  /* Font Awesome down arrow */
+}

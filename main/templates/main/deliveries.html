@@ -35,14 +35,25 @@
                         <td>{{ request.request_blood_id }}</td>
                         <td>{{ request.request_date|date:"d.m.Y" }}</td>
                         <td>
-                            <span class="badge {% if request.status == 'inprogress' %}bg-warning{% else %}bg-success{% endif %}">
+                            <span class="badge {% if request.status == 'inprogress' %}bg-warning
+                                               {% elif request.status == 'Waiting for processing' %}bg-danger
+                                               {% elif request.status == 'Pending' %}bg-secondary
+                                               {% else %}bg-success{% endif %}">
                                 {{ request.status }}
                             </span>
                         </td>
                         <td class="text-end">
                             <div class="btn-group gap-1">
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addTransportModal{{ request.request_blood_id }}">
-                                    <i class="fa-solid fa-truck"></i>
+                                <button class="btn btn-primary btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#addTransportModal{{ request.request_blood_id }}"
+                                        {% if request.status == 'Assigned' or request.status == 'Pending' %}
+                                            disabled
+                                            title="Transport already assigned"
+                                        {% else %}
+                                            title="Assign transport"
+                                        {% endif %}>
+                                    <i class="fa-solid fa-truck" {% if request.status == 'Assigned' or request.status == 'Pending'%}style="opacity: 0.5;"{% endif %}></i>
                                 </button>
                             </div>
                         </td>

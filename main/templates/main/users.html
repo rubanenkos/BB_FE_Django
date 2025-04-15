@@ -11,13 +11,13 @@
             </button>
         </div>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="usersTable">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th class="sortable" data-sort="id">Id <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="name">Name <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="email">Email <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="role">Role <i class="fa-solid fa-sort"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,4 +71,56 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const table = document.getElementById('usersTable');
+    const headers = table.querySelectorAll('th.sortable');
+    
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.dataset.sort;
+            const isAsc = header.classList.contains('asc');
+            
+            // Remove all sort classes
+            headers.forEach(h => {
+                h.classList.remove('asc', 'desc');
+            });
+            
+            // Add new sort class
+            header.classList.add(isAsc ? 'desc' : 'asc');
+            
+            // Sort the table
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            const sortedRows = rows.sort((a, b) => {
+                let aVal, bVal;
+                
+                if (column === 'id') {
+                    aVal = parseInt(a.cells[0].textContent);
+                    bVal = parseInt(b.cells[0].textContent);
+                } else {
+                    const columnIndex = {
+                        'name': 1,
+                        'email': 2,
+                        'role': 3
+                    }[column];
+                    aVal = a.cells[columnIndex].textContent.trim().toLowerCase();
+                    bVal = b.cells[columnIndex].textContent.trim().toLowerCase();
+                }
+                
+                if (isAsc) {
+                    return bVal < aVal ? -1 : bVal > aVal ? 1 : 0;
+                } else {
+                    return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                }
+            });
+            
+            // Update table body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            sortedRows.forEach(row => tbody.appendChild(row));
+        });
+    });
+});
+</script>
 {% endblock %}

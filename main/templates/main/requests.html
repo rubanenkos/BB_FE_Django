@@ -38,20 +38,35 @@
                         <td>{{ request.request_blood_id }}</td>
                         <td>{{ request.request_date|date:"d.m.Y" }}</td>
                         <td>
-                            <span class="badge {% if request.status == 'inprogress' %}bg-warning{% else %}bg-success{% endif %}">
+                            <span class="badge {% if request.status == 'inprogress' %}bg-warning
+                                               {% elif request.status == 'Waiting for processing' %}bg-danger
+                                               {% elif request.status == 'Pending' %}bg-secondary
+                                               {% else %}bg-success{% endif %}">
                                 {{ request.status }}
                             </span>
                         </td>
                         <td class="text-end">
                             <div class="btn-group gap-1">
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#detailsRequestModal{{ request.request_blood_id }}">
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" title="Add request details" data-bs-target="#detailsRequestModal{{ request.request_blood_id }}">
                                     <i class="fa-duotone fa-solid fa-plus"></i>
                                 </button>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewRequestModal{{ request.request_blood_id }}">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" title="View request details" data-bs-target="#viewRequestModal{{ request.request_blood_id }}">
                                     <i class="fa-solid fa-list"></i>
                                 </button>
-                                <button class="btn btn-warning btn-sm" onclick="searchRequest('{{ request.request_blood_id }}')" data-bs-toggle="modal" data-bs-target="#searchRequestModal{{ request.request_blood_id }}">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                <button class="btn btn-warning btn-sm" 
+                                    onclick="searchRequest('{{ request.request_blood_id }}')" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#searchRequestModal{{ request.request_blood_id }}"
+                                    {% if request.status != 'Pending' %}
+                                        disabled
+                                        title="Search only available for pending or waiting requests"
+                                    {% else %}
+                                        title="Search available banks"
+                                    {% endif %}>
+                                <i class="fa-solid fa-magnifying-glass" 
+                                {% if request.status != 'Pending'  %}
+                                    style="opacity: 0.5;"
+                                {% endif %}></i>
                                 </button>
                             </div>
                         </td>
@@ -174,7 +189,10 @@
                             <tr>
                                 <th>Status:</th>
                                 <td>
-                                    <span class="badge {% if request.status == 'inprogress' %}bg-warning{% else %}bg-success{% endif %}">
+                                    <span class="badge {% if request.status == 'inprogress' %}bg-warning
+                                                       {% elif request.status == 'Waiting for processing' %}bg-danger
+                                                       {% elif request.status == 'Pending' %}bg-secondary
+                                                       {% else %}bg-success{% endif %}">
                                         {{ request.status }}
                                     </span>
                                 </td>
