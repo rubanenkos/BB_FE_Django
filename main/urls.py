@@ -6,7 +6,7 @@ from .views import (
     users, contacts, register, donors,
     supply, process_supply, blood_requests,
     add_request, add_request_details, search_request,
-    approve_request
+    approve_request, deliveries, create_transport
 )
 urlpatterns = [
     path('', login, name='login'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('donors/', donors, name='donors'),
     path('contacts/', contacts, name='contacts'),
     path('requests/', blood_requests, name='requests'),
+    path('deliveries/', deliveries, name='deliveries'),
     path('logout/', logout, name='logout'),
     path('add_user/', add_user, name='add_user'),
     path('add_donor/', add_donor, name='add_donor'),
@@ -27,5 +28,7 @@ urlpatterns = [
     path('add_request/', add_request, name='add_request'),
     path('add_request_details/<int:request_blood_id>/', add_request_details, name='add_request_details'),
     path('search_request/<int:request_blood_id>/', search_request, name='search_request'),
-path('approve_request/<int:request_blood_id>/', approve_request, name='approve_request'),
+    path('approve_request/<int:request_blood_id>/', approve_request, name='approve_request'),
+    path('create_transport/<int:request_blood_id>/', create_transport, name='create_transport'),
+
 ]
