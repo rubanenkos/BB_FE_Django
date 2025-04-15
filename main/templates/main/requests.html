@@ -3,7 +3,7 @@
 {% block title %}Blood Requests{% endblock %}
 
 {% block content %}
-    {% if messages %}
+{% if messages %}
     <div class="messages">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -12,7 +12,7 @@
         </div>
         {% endfor %}
     </div>
-    {% endif %}
+{% endif %}
 
     <div class="features">
         <div class="header-container">
@@ -119,14 +119,6 @@
                                     <option value="7">B-</option>
                                     <option value="8">AB+</option>
                                     <option value="9">AB-</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rhFactor" class="form-label">Rhesus Factor</label>
-                                <select class="form-select" name="rhesus_factor" required>
-                                    <option value="">Select rhesus factor</option>
-                                    <option value="positive">Positive (+)</option>
-                                    <option value="negative">Negative (-)</option>
                                 </select>
                             </div>
                             <div class="mb-3">

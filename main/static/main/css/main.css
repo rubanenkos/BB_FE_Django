@@ -294,16 +294,28 @@ main {
     font-size: 0.8em;
     color: #666;
 }
-
 .messages {
     position: fixed;
-    top: 20px;
+    bottom: 20px;  /* Changed from top to bottom */
     right: 20px;
     z-index: 1050;
     min-width: 300px;
+    max-width: 400px;
 }
 
 .alert {
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
