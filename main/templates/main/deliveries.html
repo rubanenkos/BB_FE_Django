@@ -47,13 +47,16 @@
                                 <button class="btn btn-primary btn-sm" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#addTransportModal{{ request.request_blood_id }}"
-                                        {% if request.status == 'Assigned' or request.status == 'Pending' %}
+                                        {% if request.status != 'Waiting for processing' %}
                                             disabled
-                                            title="Transport already assigned"
+                                            title="Transport can only be assigned to requests waiting for processing"
                                         {% else %}
                                             title="Assign transport"
                                         {% endif %}>
-                                    <i class="fa-solid fa-truck" {% if request.status == 'Assigned' or request.status == 'Pending'%}style="opacity: 0.5;"{% endif %}></i>
+                                    <i class="fa-solid fa-truck" 
+                                    {% if request.status != 'Waiting for processing' %}
+                                        style="opacity: 0.5;"
+                                    {% endif %}></i>
                                 </button>
                             </div>
                         </td>

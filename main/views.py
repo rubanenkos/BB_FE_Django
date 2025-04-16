@@ -24,6 +24,7 @@ def users(request):
     # Fetch users
     users_response = requests.get(f'{settings.BACKEND_API_URL}/users')
     users = users_response.json()
+    # users = [user for user in all_users if user['role_id'] != 1]
     
     # Fetch roles
     roles_response = requests.get(f'{settings.BACKEND_API_URL}/roles')

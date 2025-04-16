@@ -47,8 +47,13 @@
                         </td>
                         <td class="text-end">
                             <div class="btn-group gap-1">
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" title="Add request details" data-bs-target="#detailsRequestModal{{ request.request_blood_id }}">
-                                    <i class="fa-duotone fa-solid fa-plus"></i>
+                                <button class="btn btn-success btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        title="{% if request.status == 'Pending' %}Add request details{% else %}Can only add details to pending requests{% endif %}" 
+                                        data-bs-target="#detailsRequestModal{{ request.request_blood_id }}"
+                                        {% if request.status != 'Pending' %}disabled{% endif %}>
+                                    <i class="fa-duotone fa-solid fa-plus"
+                                       {% if request.status != 'Pending' %}style="opacity: 0.5;"{% endif %}></i>
                                 </button>
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" title="View request details" data-bs-target="#viewRequestModal{{ request.request_blood_id }}">
                                     <i class="fa-solid fa-list"></i>
