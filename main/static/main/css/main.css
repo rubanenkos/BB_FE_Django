@@ -290,13 +290,46 @@ main {
 }
 
 .user-name {
-    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-name:hover {
+    color: #e92d0c;
+    text-decoration: underline;
+}
+
+.user-details-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.change-password-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
 }
 
 .user-role {
     font-size: 0.8em;
     color: #666;
 }
+
+.user-details-container .card-body h5 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-details-container .card-body p.h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0;
+}
+
+.change-password-section h3 {
+    font-size: 1.5rem;
+}
+
 .messages {
     position: fixed;
     bottom: 20px;  /* Changed from top to bottom */

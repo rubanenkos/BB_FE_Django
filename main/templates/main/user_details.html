@@ -1,0 +1,52 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="header-container">
+        <h1>User Details</h1>
+    </div>
+
+    <div class="user-details-container">
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h7 class="text-muted mb-2">Name</h7>
+                    <p class="h5">{{ user.name }}</p>
+                </div>
+                <div class="mb-4">
+                    <h7 class="text-muted mb-2">Email</h7>
+                    <p class="h5">{{ user.email }}</p>
+                </div>
+                <div class="mb-4">
+                    <h7 class="text-muted mb-2">Role</h7>
+                    <p class="h5">{{ user.role_name }}</p>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="change-password-section">
+                    <h3 class="mb-4">Change Password</h3>
+                    <form method="POST" action="{% url 'change_password' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" name="current_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Change Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

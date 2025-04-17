@@ -78,6 +78,15 @@ def contacts(request):
 def analytics(request):
     return render(request, 'main/analytics.html')
 
+def user_details(request):
+    user = request.session.get('user')
+    if not user:
+        return redirect('login')
+    
+    return render(request, 'main/user_details.html', {
+        'user': user
+    })
+
 def supply(request):
     try:
         supplies_response = requests.get(f'{settings.BACKEND_API_URL}/supplies/2')
@@ -173,8 +182,16 @@ def login(request):
                     return redirect('home')
                 else:
                     messages.error(request, 'Error fetching user details')
+            elif response.status_code == 401:
+                return render(request, 'main/login.html', {
+                    'error': 'Invalid email or password',
+                    'email': email  # Preserve the email input
+                })
             else:
-                messages.error(request, 'Invalid login credentials')
+                return render(request, 'main/login.html', {
+                    'error': 'Login failed. Please try again.',
+                    'email': email
+                })
         except requests.exceptions.RequestException as e:
             messages.error(request, f'Connection error: {str(e)}')
             
@@ -625,3 +642,41 @@ def create_transport(request, request_blood_id):
             messages.error(request, f'Connection error: {str(e)}')
 
     return redirect('deliveries')
+
+def change_password(request):
+    if request.method == 'POST':
+        user = request.session.get('user')
+        if not user:
+            return redirect('login')
+
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, 'New passwords do not match')
+            return redirect('user_details')
+
+        try:
+            # Call your backend API to change password
+            response = requests.post(
+                f'{settings.BACKEND_API_URL}/change-password',
+                headers={'Content-Type': 'application/json'},
+                json={
+                    'user_id': user['user_id'],
+                    'current_password': current_password,
+                    'new_password': new_password
+                }
+            )
+
+            if response.status_code == 200:
+                messages.success(request, 'Password changed successfully')
+            else:
+                messages.error(request, 'Failed to change password. Please check your current password.')
+
+        except requests.exceptions.RequestException:
+            messages.error(request, 'Connection error. Please try again later.')
+
+        return redirect('user_details')
+
+    return redirect('user_details')

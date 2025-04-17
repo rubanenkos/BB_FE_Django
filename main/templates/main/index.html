@@ -1,10 +1,243 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <div class="features">
-        <h1>Home page</h1>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea eos, facilis quam odit iusto provident hic deserunt officia aliquam non nesciunt repellat fugiat sequi? Autem voluptatibus quam voluptatem amet reprehenderit?</p>
-        <button class="btn btn-warning">Button</button>
-{% endblock %}  
+<div class="features">
+    <div class="row">
+        <!-- Left Column - News Section -->
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-regular fa-newspaper me-2"></i>Latest News
+                    </h5>
+                    <div class="news-container">
+                        <div class="news-item">
+                            <h6 class="news-date">April 17, 2025</h6>
+                            <h4>Blood Bank System Update</h4>
+                            <p>New features have been added to improve blood request processing and delivery tracking.</p>
+                        </div>
+                        <div class="news-item">
+                            <h6 class="news-date">April 16, 2025</h6>
+                            <h4>Emergency Blood Drive</h4>
+                            <p>Urgent need for O-negative blood type. Please check requests section for details.</p>
+                        </div>
+                        <div class="news-item">
+                            <h6 class="news-date">April 15, 2025</h6>
+                            <h4>System Maintenance Notice</h4>
+                            <p>Scheduled maintenance will be performed on April 20th from 2 AM to 4 AM.</p>
+                        </div>
+                        <div class="news-item">
+                            <h6 class="news-date">April 14, 2025</h6>
+                            <h4>Successful Community Blood Drive</h4>
+                            <p>Thank you to everyone who participated in the City Hall blood drive last week! We collected over 150 units thanks to your generosity.</p>
+                        </div>
+                        <div class="news-item">
+                            <h6 class="news-date">April 12, 2025</h6>
+                            <h4>Updated Training Materials Available</h4>
+                            <p>New training modules for blood handling safety protocols have been uploaded to the resources section. Please review by end of month.</p>
+                        </div>
+                        <div class="news-item">
+                            <h6 class="news-date">April 10, 2025</h6>
+                            <h4>Inventory Levels Stable for AB+</h4>
+                            <p>Current inventory levels for AB positive blood type are stable. Continued monitoring for other types remains crucial.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Time and Calendar -->
+        <div class="col-md-4">
+            <!-- Time and Date Widget -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-regular fa-clock me-2"></i>Current Time & Date
+                    </h5>
+                    <div id="clock" class="display-4 mb-2"></div>
+                    <div id="date" class="lead"></div>
+                </div>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div class="card calendar-card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-regular fa-calendar me-2"></i>Calendar
+                    </h5>
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+#clock {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #e92d0c;
+}
+
+.card-title {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+}
+
+.news-container {
+    max-height: 800px; /* Increased height for full column */
+    overflow-y: auto;
+}
+
+.news-item {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+}
+
+.news-date {
+    color: #666;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.news-item h4 {
+    color: #e92d0c;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.news-item p {
+    color: #666;
+    margin-bottom: 0;
+}
+
+.fc-button-primary {
+    background-color: #e92d0c !important;
+    border-color: #e92d0c !important;
+}
+
+.fc-button-primary:hover {
+    background-color: #c62508 !important;
+    border-color: #c62508 !important;
+}
+
+.fc-day-today {
+    background-color: #fff3f2 !important;
+}
+
+.fc-event {
+    border: none;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+#calendar {
+    height: 450px; /* Increased from 300px */
+    font-size: 0.85rem; /* Make font smaller */
+}
+
+.fc {
+    max-height: 450px; /* Increased from 300px */
+}
+
+.fc .fc-header-toolbar {
+    margin-bottom: 0.5rem !important; /* Reduce toolbar margin */
+    font-size: 0.9rem; /* Make toolbar text smaller */
+}
+
+.fc .fc-daygrid-body {
+    max-height: 370px; /* Increased from 250px */
+}
+
+.fc .fc-daygrid-day {
+    min-height: 2rem !important; /* Reduce day cell height */
+    padding: 2px !important; /* Reduce cell padding */
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.2rem; /* Make month title smaller */
+}
+
+.fc .fc-button {
+    padding: 0.2rem 0.4rem; /* Make buttons smaller */
+    font-size: 0.85rem;
+}
+
+.col-md-4 .card {
+    margin-bottom: 1.5rem;
+}
+
+/* Make time widget more compact */
+.col-md-4 #clock {
+    font-size: 2rem;
+}
+
+.col-md-4 .lead {
+    font-size: 1rem;
+}
+
+/* Ensure the calendar card body has enough space */
+.calendar-card .card-body {
+    min-height: 400px; /* Added minimum height */
+    padding-bottom: 1.5rem; /* Added extra padding at bottom */
+}
+</style>
+
+<script>
+function updateDateTime() {
+    const now = new Date();
+    
+    // Update clock
+    document.getElementById('clock').textContent = now.toLocaleTimeString();
+    
+    // Update date
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
+}
+
+// Update every second
+setInterval(updateDateTime, 1000);
+updateDateTime(); // Initial call
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next',
+            center: 'title',
+            right: 'today'
+        },
+        height: 320, // Increased height
+        contentHeight: 'auto',
+        events: [
+            {
+                title: 'Blood Drive',
+                start: '2025-04-20',
+                backgroundColor: '#e92d0c'
+            }
+        ],
+        dayMaxEvents: 1, // Limit number of visible events per day
+        eventDisplay: 'block' // More compact event display
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}
