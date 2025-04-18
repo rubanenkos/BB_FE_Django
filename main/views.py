@@ -101,12 +101,19 @@ def analytics(request):
                 inventory_data['total_inventory'],
                 key=lambda x: (x['blood_group_name'], x['blood_part_name'])
             )
+            # Sort expiring components
+            sorted_expiring = sorted(
+                inventory_data['expiring_tomorrow'],
+                key=lambda x: (x['blood_group_name'], x['blood_part_name'])
+            )
         else:
             sorted_inventory = []
+            sorted_expiring = []
 
         context = {
             'analytics': analytics_data,
-            'inventory': sorted_inventory
+            'inventory': sorted_inventory,
+            'expiring': sorted_expiring
         }
 
         return render(request, 'main/analytics.html', context)
@@ -122,7 +129,8 @@ def analytics(request):
                 'transit': 0,
                 'waiting_requests': 0
             },
-            'inventory': []
+            'inventory': [],
+            'expiring': []
         })
 
 def user_details(request):
