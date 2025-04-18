@@ -1,4 +1,6 @@
 {% extends 'main/layout.html' %}
+{% load static %}
+{% load math_filters %}
 
 {% block title %}Analytics{% endblock %}
 
@@ -33,9 +35,9 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-subtitle mb-2 text-muted">Total Requests</h6>
-                            <h2 class="card-title">150</h2>
+                            <h2 class="card-title mb-0">{{ analytics.total_requests }}</h2>
                             <p class="card-text text-success">
-                                <i class="fa-solid fa-arrow-up"></i> 12% from last month
+                                 Requests in the last years
                             </p>
                         </div>
                     </div>
@@ -43,41 +45,87 @@
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">Fulfilled Requests</h6>
-                            <h2 class="card-title">85%</h2>
+                            <h6 class="card-subtitle mb-2 text-muted">Current Month Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.current_month_requests }}</h2>
                             <p class="card-text text-success">
-                                <i class="fa-solid fa-arrow-up"></i> 5% from last month
+                               Requests in the current month
                             </p>
                         </div>
                     </div>
                 </div>
-                <!-- Add more KPI cards as needed -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Completed Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.completed_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.completed_requests|divide:analytics.total_requests >= 0.5 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.completed_requests|divide:analytics.total_requests >= 0.5 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.completed_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <p></p>
+            </div>
+            <div class="row g-4">
+                <!-- KPI Cards -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Assigned Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.assigned_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.assigned_requests|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.assigned_requests|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.assigned_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">In Transit</h6>
+                            <h2 class="card-title mb-0">{{ analytics.transit }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.transit|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.transit|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.transit|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Waiting Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.waiting_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.waiting_requests|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.waiting_requests|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.waiting_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Monthly Request Trends</h5>
-                            <div id="monthlyTrendsChart" style="height: 300px;">
-                                <!-- Chart will be rendered here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Blood Type Distribution</h5>
-                            <div id="bloodTypeChart" style="height: 300px;">
-                                <!-- Chart will be rendered here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+           
 
         <!-- Requests Analysis Tab -->
         <div class="tab-pane fade" id="requests" role="tabpanel">
@@ -91,43 +139,7 @@
     </div>
 </div>
 
-<!-- Add Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Initialize charts -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Sample chart initialization
-    const monthlyTrendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
-    new Chart(monthlyTrendsCtx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Requests',
-                data: [65, 59, 80, 81, 56, 55],
-                borderColor: '#e92d0c',
-                tension: 0.1
-            }]
-        }
-    });
-
-    const bloodTypeCtx = document.getElementById('bloodTypeChart').getContext('2d');
-    new Chart(bloodTypeCtx, {
-        type: 'pie',
-        data: {
-            labels: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
-            datasets: [{
-                data: [45, 12, 25, 8, 15, 5, 3, 2],
-                backgroundColor: [
-                    '#e92d0c', '#ff6b6b', '#4ecdc4', '#45b7af',
-                    '#96ceb4', '#88b8a9', '#274c77', '#1a3557'
-                ]
-            }]
-        }
-    });
-});
-</script>
 
 <!-- Add custom styles -->
 <style>

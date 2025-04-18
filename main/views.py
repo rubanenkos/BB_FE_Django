@@ -76,7 +76,68 @@ def contacts(request):
     return render(request, 'main/contacts.html')
 
 def analytics(request):
-    return render(request, 'main/analytics.html')
+    try:
+        # Fetch analytics data
+        analytics_response = requests.get(f'{settings.BACKEND_API_URL}/blood-requests-analytics/2')
+        if analytics_response.status_code == 200:
+            analytics_data = analytics_response.json()
+        else:
+            analytics_data = {
+                'assigned_requests': 0,
+                'completed_requests': 0,
+                'current_month_requests': 0,
+                'hospital_id': 2,
+                'total_requests': 0,
+                'transit': 0,
+                'waiting_requests': 0
+            }
+
+        # Fetch monthly trends data
+        response = requests.get(f'{settings.BACKEND_API_URL}/blood-requests-hospital/2')
+        if response.status_code == 200:
+            requests_data = response.json()
+            
+            # Process data for monthly trends
+            monthly_counts = {}
+            for req in requests_data:
+                date = datetime.strptime(req['request_date'], '%Y-%m-%d')
+                month_key = date.strftime('%B %Y')
+                monthly_counts[month_key] = monthly_counts.get(month_key, 0) + 1
+
+            sorted_months = sorted(monthly_counts.keys(), 
+                                key=lambda x: datetime.strptime(x, '%B %Y'))
+            
+            monthly_data = {
+                'labels': json.dumps(sorted_months),
+                'counts': json.dumps([monthly_counts[month] for month in sorted_months])
+            }
+        else:
+            monthly_data = {
+                'labels': '[]',
+                'counts': '[]'
+            }
+
+        return render(request, 'main/analytics.html', {
+            'analytics': analytics_data,
+            'monthly_data': monthly_data
+        })
+
+    except requests.exceptions.RequestException:
+        return render(request, 'main/analytics.html', {
+            'analytics': {
+                'assigned_requests': 0,
+                'completed_requests': 0,
+                'current_month_requests': 0,
+                'hospital_id': 2,
+                'total_requests': 0,
+                'transit': 0,
+                'waiting_requests': 0
+            },
+            'monthly_data': {
+                'labels': '[]',
+                'counts': '[]'
+            }
+        })
 
 def user_details(request):
     user = request.session.get('user')
