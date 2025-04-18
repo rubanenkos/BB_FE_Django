@@ -92,35 +92,24 @@ def analytics(request):
                 'waiting_requests': 0
             }
 
-        # Fetch monthly trends data
-        response = requests.get(f'{settings.BACKEND_API_URL}/blood-requests-hospital/2')
-        if response.status_code == 200:
-            requests_data = response.json()
-            
-            # Process data for monthly trends
-            monthly_counts = {}
-            for req in requests_data:
-                date = datetime.strptime(req['request_date'], '%Y-%m-%d')
-                month_key = date.strftime('%B %Y')
-                monthly_counts[month_key] = monthly_counts.get(month_key, 0) + 1
-
-            sorted_months = sorted(monthly_counts.keys(), 
-                                key=lambda x: datetime.strptime(x, '%B %Y'))
-            
-            monthly_data = {
-                'labels': json.dumps(sorted_months),
-                'counts': json.dumps([monthly_counts[month] for month in sorted_months])
-            }
+        # Fetch inventory data
+        inventory_response = requests.get(f'{settings.BACKEND_API_URL}/daily-report/2')
+        if inventory_response.status_code == 200:
+            inventory_data = inventory_response.json()
+            # Sort inventory by blood group and blood part
+            sorted_inventory = sorted(
+                inventory_data['total_inventory'],
+                key=lambda x: (x['blood_group_name'], x['blood_part_name'])
+            )
         else:
-            monthly_data = {
-                'labels': '[]',
-                'counts': '[]'
-            }
+            sorted_inventory = []
 
-        return render(request, 'main/analytics.html', {
+        context = {
             'analytics': analytics_data,
-            'monthly_data': monthly_data
-        })
+            'inventory': sorted_inventory
+        }
+
+        return render(request, 'main/analytics.html', context)
 
     except requests.exceptions.RequestException:
         return render(request, 'main/analytics.html', {
@@ -133,10 +122,7 @@ def analytics(request):
                 'transit': 0,
                 'waiting_requests': 0
             },
-            'monthly_data': {
-                'labels': '[]',
-                'counts': '[]'
-            }
+            'inventory': []
         })
 
 def user_details(request):
