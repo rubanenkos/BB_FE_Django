@@ -649,7 +649,7 @@ def change_password(request):
         if not user:
             return redirect('login')
 
-        current_password = request.POST.get('current_password')
+        old_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -658,13 +658,11 @@ def change_password(request):
             return redirect('user_details')
 
         try:
-            # Call your backend API to change password
             response = requests.post(
-                f'{settings.BACKEND_API_URL}/change-password',
+                f'{settings.BACKEND_API_URL}/user/change-password/{user["user_id"]}',
                 headers={'Content-Type': 'application/json'},
                 json={
-                    'user_id': user['user_id'],
-                    'current_password': current_password,
+                    'old_password': old_password,
                     'new_password': new_password
                 }
             )
