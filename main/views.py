@@ -217,6 +217,15 @@ def login(request):
                 if user_response.status_code == 200:
                     user_data = user_response.json()
                     
+                    # Check if user has allowed role
+                    allowed_roles = [1, 2, 4]
+                    if user_data['role_id'] not in allowed_roles:
+                        messages.error(request, 'Access denied. You do not have permission to log in.')
+                        return render(request, 'main/login.html', {
+                            'error': 'Access denied',
+                            'email': email
+                        })
+                    
                     # Fetch roles to get role name
                     roles_response = requests.get(f'{settings.BACKEND_API_URL}/roles')
                     if roles_response.status_code == 200:
@@ -240,7 +249,7 @@ def login(request):
             elif response.status_code == 401:
                 return render(request, 'main/login.html', {
                     'error': 'Invalid email or password',
-                    'email': email  # Preserve the email input
+                    'email': email
                 })
             else:
                 return render(request, 'main/login.html', {
