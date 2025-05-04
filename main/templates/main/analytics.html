@@ -1,0 +1,326 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="header-container">
+        <h1>Analytics</h1>
+    </div>
+
+    <!-- Analytics Navigation -->
+    <div class="analytics-nav mb-4">
+        <div class="nav nav-pills" id="analytics-tab" role="tablist">
+            <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                <i class="fa-solid fa-chart-pie me-2"></i>Overview
+            </button>
+            <button class="nav-link" id="requests-tab" data-bs-toggle="pill" data-bs-target="#requests" type="button" role="tab">
+                <i class="fa-solid fa-chart-line me-2"></i>Expiring Components
+            </button>
+            <button class="nav-link" id="inventory-tab" data-bs-toggle="pill" data-bs-target="#inventory" type="button" role="tab">
+                <i class="fa-solid fa-chart-bar me-2"></i>Blood Inventory
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="analytics-content">
+        <!-- Overview Tab -->
+        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+            <div class="row g-4">
+                <!-- KPI Cards -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.total_requests }}</h2>
+                            <p class="card-text text-success">
+                                 Requests in the last years
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Current Month Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.current_month_requests }}</h2>
+                            <p class="card-text text-success">
+                               Requests in the current month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Completed Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.completed_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.completed_requests|divide:analytics.total_requests >= 0.5 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.completed_requests|divide:analytics.total_requests >= 0.5 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.completed_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <p></p>
+            </div>
+            <div class="row g-4">
+                <!-- KPI Cards -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Assigned Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.assigned_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.assigned_requests|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.assigned_requests|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.assigned_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">In Transit</h6>
+                            <h2 class="card-title mb-0">{{ analytics.transit }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.transit|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.transit|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.transit|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Waiting Requests</h6>
+                            <h2 class="card-title mb-0">{{ analytics.waiting_requests }}</h2>
+                            <p class="card-text {% if analytics.total_requests > 0 %}{% if analytics.waiting_requests|divide:analytics.total_requests <= 0.3 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                                <!-- <i class="fa-solid {% if analytics.total_requests > 0 %}{% if analytics.waiting_requests|divide:analytics.total_requests <= 0.3 %}fa-arrow-down{% else %}fa-arrow-up{% endif %}{% endif %}"></i> -->
+                                {% if analytics.total_requests > 0 %}
+                                    {{ analytics.waiting_requests|multiply:100|divide:analytics.total_requests|floatformat:1 }}% of total requests
+                                {% else %}
+                                    0% of total requests
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expiring Components Tab -->
+        <div class="tab-pane fade" id="requests" role="tabpanel">
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Expiring Blood Components</h5>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Blood Type</th>
+                                                <th>Component</th>
+                                                <th>Expiry Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in expiring %}
+                                            <tr>
+                                                <td>{{ item.blood_group_name }}{{ item.rhesus_factor|slice:":1" }}</td>
+                                                <td>{{ item.blood_part_name }}</td>
+                                                <td>{{ item.expiry_date }}</td>
+                                                <td>
+                                                    <span class="badge bg-warning">
+                                                        Expiring Tomorrow
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">No expiring components</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Trends Tab -->
+        <div class="tab-pane fade" id="inventory" role="tabpanel">
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Current Blood Inventory</h5>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Blood Type</th>
+                                                <th>Component</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in inventory %}
+                                            <tr>
+                                                <td>{{ item.blood_group_name }}{{ item.rhesus_factor|slice:":1" }}</td>
+                                                <td>{{ item.blood_part_name }}</td>
+                                                <td>{{ item.total_quantity }}</td>
+                                                <td>
+                                                    <span class="badge {% if item.total_quantity >= 5 %}bg-success{% elif item.total_quantity >= 2 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                        {% if item.total_quantity >= 5 %}
+                                                            Adequate
+                                                        {% elif item.total_quantity >= 2 %}
+                                                            Low
+                                                        {% else %}
+                                                            Critical
+                                                        {% endif %}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">No inventory data available</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add custom styles -->
+<style>
+.analytics-nav {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+}
+
+.analytics-nav .nav-link {
+    color: #495057;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.analytics-nav .nav-link.active {
+    background-color: #e92d0c;
+    color: white;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Add to existing styles */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+.table td, .table th {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.features {
+    min-height: 600px;  /* Ensure minimum height for content */
+}
+
+.tab-content {
+    height: 100%;
+}
+
+.tab-pane {
+    padding: 20px 0;
+    min-height: 400px;  /* Minimum height for tab content */
+}
+
+.table-responsive {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.card {
+    height: 100%;
+    margin-bottom: 1rem;
+}
+
+.badge {
+    padding: 0.5em 1em;
+}
+
+/* Ensure tabs are clickable */
+.nav-link {
+    cursor: pointer;
+}
+
+/* Active tab styling */
+.nav-pills .nav-link.active {
+    background-color: #e92d0c;
+}
+</style>
+{% endblock %}

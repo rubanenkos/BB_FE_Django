@@ -3,33 +3,136 @@
 {% block title %}Users{% endblock %}
 
 {% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
     <div class="features">
-        <h1>Donors List</h1>
+        <div class="header-container">
+            <h1>Users List</h1>
+            <button class="btn btn-danger add-user-btn" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                Add new user
+            </button>
+        </div>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="usersTable">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Blood Group</th>
-                        <th>Rhesus Factor</th>
-                        <th>Sex</th>
-                        <th>Contact</th>
+                        <th class="sortable" data-sort="id">Id <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="name">Name <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="email">Email <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-sort="role">Role <i class="fa-solid fa-sort"></i></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for donor in donors %}
+                    {% for user in users %}
+                    {% if user.role_id != 1 and user.role_id != 5 %}
                     <tr>
-                        <td>{{ donor.user_name }}</td>
-                        <td>{{ donor.age }}</td>
-                        <td>{{ donor.blood_group }}</td>
-                        <td>{{ donor.rhesus_factor|stringformat:"s"|cut:" " }}</td>
-                        <td>{{ donor.sex|stringformat:"s"|cut:" " }}</td>
-                        <td>{{ donor.contact_number|stringformat:"s"|cut:" " }}</td>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role_name }}</td>
                     </tr>
-                    {% endfor %}
+                    {% endif %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+     
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'add_user' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userRole" class="form-label">Role</label>
+                        <select class="form-select" name="role_id" required>
+                            <option value="">Select role</option>
+                            {% for role in roles %}
+                            <option value="{{ role.role_id }}">{{ role.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const table = document.getElementById('usersTable');
+    const headers = table.querySelectorAll('th.sortable');
+    
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.dataset.sort;
+            const isAsc = header.classList.contains('asc');
+            
+            // Remove all sort classes
+            headers.forEach(h => {
+                h.classList.remove('asc', 'desc');
+            });
+            
+            // Add new sort class
+            header.classList.add(isAsc ? 'desc' : 'asc');
+            
+            // Sort the table
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            const sortedRows = rows.sort((a, b) => {
+                let aVal, bVal;
+                
+                if (column === 'id') {
+                    aVal = parseInt(a.cells[0].textContent);
+                    bVal = parseInt(b.cells[0].textContent);
+                } else {
+                    const columnIndex = {
+                        'name': 1,
+                        'email': 2,
+                        'role': 3
+                    }[column];
+                    aVal = a.cells[columnIndex].textContent.trim().toLowerCase();
+                    bVal = b.cells[columnIndex].textContent.trim().toLowerCase();
+                }
+                
+                if (isAsc) {
+                    return bVal < aVal ? -1 : bVal > aVal ? 1 : 0;
+                } else {
+                    return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                }
+            });
+            
+            // Update table body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            sortedRows.forEach(row => tbody.appendChild(row));
+        });
+    });
+});
+</script>
 {% endblock %}

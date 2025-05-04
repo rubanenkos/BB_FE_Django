@@ -1,0 +1,222 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Supply{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="features">
+        <div class="header-container">
+            <h1>Blood Supply</h1>
+            <button class="btn btn-danger add-supply-btn" data-bs-toggle="modal" data-bs-target="#addSupplyModal">
+                Add new supply
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Blood Donation Point</th>
+                        <th>Date</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                {% load l10n %}
+                <tbody>
+                    {% for supply in supplies %}
+                    <tr>
+                        <td>{{ supply.supply_id }}</td>
+                        <td>{{ supply.blood_donation_center_name }}</td>
+                        <td>{{ supply.supply_date|date:"d.m.Y" }}</td>
+                        <td class="text-end">
+                            <div class="btn-group gap-1">
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#detailsSupplyModal{{ supply.supply_id }}">
+                                    <i class="fa-duotone fa-solid fa-plus"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editSupplyModal{{ supply.supply_id }}">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteSupplyModal{{ supply.supply_id }}">
+                                    <i class="fa-solid fa-chart-diagram"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Supply Modal -->
+<div class="modal fade" id="addSupplyModal" tabindex="-1" aria-labelledby="addSupplyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSupplyModalLabel">Add New Supply</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'add_supply' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="center" class="form-label">Blood Donation Point</label>
+                        <select class="form-select" name="blood_donation_center_id" required>
+                            <option value="">Select donation point</option>
+                            {% for center in centers %}
+                                <option value="{{ center.blood_donation_center_id }}">{{ center.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplyDate" class="form-label">Supply Date</label>
+                        <input type="date" 
+                               class="form-control" 
+                               name="supply_date" 
+                               required
+                               max="{{ today }}"
+                               id="supplyDate">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Supply Modal - Add this after the add supply modal -->
+{% for supply in supplies %}
+<!-- Details Supply Modal -->
+<div class="modal fade" id="detailsSupplyModal{{ supply.supply_id }}" tabindex="-1" aria-labelledby="detailsSupplyModalLabel{{ supply.supply_id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsSupplyModalLabel{{ supply.supply_id }}">
+                    Supply Details #{{ supply.supply_id }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'add_supply_details' supply.supply_id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="bloodGroup" class="form-label">Blood Group</label>
+                        <select class="form-select" name="blood_group" required>
+                            <option value="">Select blood group</option>
+                            <option value="O">O</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="AB">AB</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rhFactor" class="form-label">Rhesus Factor</label>
+                        <select class="form-select" name="rhesus_factor" required>
+                            <option value="">Select rhesus factor</option>
+                            <option value="positive">Positive (+)</option>
+                            <option value="negative">Negative (-)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="creationDate" class="form-label">Creation Date</label>
+                        <input type="date" 
+                               class="form-control" 
+                               name="creation_date" 
+                               required
+                               max="{{ today }}"
+                               value="{{ today }}"
+                               id="creationDate">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Delete/Process Supply Modal -->
+ <div class="modal fade" id="deleteSupplyModal{{ supply.supply_id }}" tabindex="-1" aria-labelledby="deleteSupplyModalLabel{{ supply.supply_id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSupplyModalLabel{{ supply.supply_id }}">Process Supply</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to process this supply?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" action="{% url 'process_supply' supply.supply_id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Supply Modal -->
+<div class="modal fade" id="editSupplyModal{{ supply.supply_id }}" tabindex="-1" aria-labelledby="editSupplyModalLabel{{ supply.supply_id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSupplyModalLabel{{ supply.supply_id }}">
+                    Supply Details #{{ supply.supply_id }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if supply.details %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Blood Group</th>
+                                    <th>Rhesus Factor</th>
+                                    <th>Creation Date</th>
+                                    <th>Expiry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in supply.details %}
+                                <tr>
+                                    <td>{{ detail.supply_details_id }}</td>
+                                    <td>{{ detail.blood_group }}</td>
+                                    <td>{{ detail.rhesus_factor|stringformat:"s"|slice:":1" }}</td>
+                                    <td>{{ detail.creation_date|date:"d.m.Y" }}</td>
+                                    <td>{{ detail.expiry_date|date:"d.m.Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>No details available for this supply.</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

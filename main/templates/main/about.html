@@ -1,8 +1,65 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}About Us{% endblock %}
 
 {% block content %}
-    <h1>About us page</h1>
-    <p>About us page</p>
-{% endblock %}  
+<div class="about-container">
+    <div class="about-header">
+        <h1>About BloodHUB</h1>
+        <p class="lead">Connecting Blood Banks, Donors, and Those in Need</p>
+    </div>
+
+    <div class="about-section">
+        <h2>Our Mission</h2>
+        <p>At BloodHUB, we're dedicated to streamlining the blood donation process and ensuring that life-saving blood 
+           reaches those who need it most. Our platform connects blood banks, donors, and healthcare facilities to create 
+           an efficient and reliable blood supply network.</p>
+    </div>
+
+    <div class="about-section">
+        <h2>What We Do</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-hand-holding-medical"></i>
+                <h3>Facilitate Donations</h3>
+                <p>Connect willing donors with nearby blood banks and donation centers.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-hospital"></i>
+                <h3>Support Healthcare</h3>
+                <p>Help hospitals maintain adequate blood supplies for emergency situations.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-truck-medical"></i>
+                <h3>Coordinate Transport</h3>
+                <p>Manage efficient transportation of blood supplies between facilities.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>Our Impact</h2>
+        <div class="impact-stats">
+            <div class="stat-card">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Active Donors</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Partner Hospitals</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">5000+</span>
+                <span class="stat-label">Lives Saved</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>Join Our Mission</h2>
+        <p>Whether you're a blood donor, healthcare provider, or blood bank administrator, you can make a difference. 
+           Join BloodHUB today and become part of our life-saving network.</p>
+        <a href="{% url 'contacts' %}" class="btn btn-danger mt-3">Contact Us</a>
+    </div>
+</div>
+{% endblock %}
