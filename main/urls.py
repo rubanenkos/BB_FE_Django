@@ -2,34 +2,38 @@ from django.urls import path
 from .views import (
     login, logout, register,
     index, about, contacts,
-    blood_requests, add_request, add_request_details, search_request,
+    blood_requests, add_request, add_request_details, search_request, approve_request,
     deliveries, create_transport,
     users, user_details, add_user,
-    analytics, supply,
+    analytics,
+    supply, add_supply, add_supply_details, process_supply,
     change_password,
-    donors, add_donor  # Add these imports
+    donors, add_donor 
 )
 
 urlpatterns = [
-    path('', index, name='home'),  # Root URL goes to home
-    path('login/', login, name='login'),  # Separate login URL
-    path('about/', about, name='about'),
-    path('contacts/', contacts, name='contacts'),
-    path('logout/', logout, name='logout'),
+    path('login/', login, name='login'),
     path('register/', register, name='register'),
+    path('', index, name='home'), 
+    path('about/', about, name='about'),
+    path('users/', users, name='users'),
+    path('donors/', donors, name='donors'),
+    path('contacts/', contacts, name='contacts'),
     path('requests/', blood_requests, name='requests'),
+    path('deliveries/', deliveries, name='deliveries'),
+    path('logout/', logout, name='logout'),
+    path('add_user/', add_user, name='add_user'),
+    path('add_donor/', add_donor, name='add_donor'),
+    path('supply/', supply, name='supply'),
+    path('add_supply/', add_supply, name='add_supply'),
+    path('add_supply_details/<int:supply_id>/', add_supply_details, name='add_supply_details'),
+    path('process_supply/<int:supply_id>/', process_supply, name='process_supply'),
     path('add_request/', add_request, name='add_request'),
     path('add_request_details/<int:request_blood_id>/', add_request_details, name='add_request_details'),
     path('search_request/<int:request_blood_id>/', search_request, name='search_request'),
-    path('deliveries/', deliveries, name='deliveries'),
+    path('approve_request/<int:request_blood_id>/', approve_request, name='approve_request'),
     path('create_transport/<int:request_blood_id>/', create_transport, name='create_transport'),
-    path('users/', users, name='users'),
-    path('user-details/', user_details, name='user_details'),
-    path('add_user/', add_user, name='add_user'),
     path('analytics/', analytics, name='analytics'),
-    path('supply/', supply, name='supply'),
+    path('user-details/', user_details, name='user_details'),
     path('change-password/', change_password, name='change_password'),
-    # Add the new URL patterns
-    path('donors/', donors, name='donors'),
-    path('add_donor/', add_donor, name='add_donor'),
 ]
