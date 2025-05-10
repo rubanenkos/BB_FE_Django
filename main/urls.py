@@ -6,7 +6,8 @@ from .views import (
     deliveries, create_transport,
     users, user_details, add_user,
     analytics, supply,
-    change_password
+    change_password,
+    donors, add_donor  # Add these imports
 )
 
 urlpatterns = [
@@ -28,4 +29,7 @@ urlpatterns = [
     path('analytics/', analytics, name='analytics'),
     path('supply/', supply, name='supply'),
     path('change-password/', change_password, name='change_password'),
+    # Add the new URL patterns
+    path('donors/', donors, name='donors'),
+    path('add_donor/', add_donor, name='add_donor'),
 ]

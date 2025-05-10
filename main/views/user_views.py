@@ -1,8 +1,11 @@
 import json
+import time
 import requests
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
+from requests.exceptions import RequestException
 
 def users(request):
     try:
@@ -10,16 +13,14 @@ def users(request):
         response = requests.get(f'{settings.BACKEND_API_URL}/users')
         users = []
         if response.status_code == 200:
-            all_users = response.json()
-            # Filter out users with role_id=1
-            users = [user for user in all_users if user['role_id'] != 1]
-
-        # Fetch roles for the dropdown
+            users = response.json()
+           
+        # Fetch roles for the Add new user dropdown
         roles_response = requests.get(f'{settings.BACKEND_API_URL}/roles')
         roles = []
         if roles_response.status_code == 200:
-            # Filter out role_id=1 from the dropdown options
-            roles = [role for role in roles_response.json() if role['role_id'] != 1]
+            # Filter out roles for dropdown options
+            roles = [role for role in roles_response.json() if role['role_id'] in [2, 3, 4]]
 
         return render(request, 'main/users.html', {
             'users': users,
@@ -47,25 +48,29 @@ def add_user(request):
         email = request.POST.get('email')
         role_id = request.POST.get('role_id')
         
+        data = {
+            "name": name,
+            "email": email,
+            "password": email,  # Using email as password
+            "role_id": int(role_id)  # Convert to integer
+        }
+        
         try:
             response = requests.post(
-                f'{settings.BACKEND_API_URL}/create-user',
-                headers={'Content-Type': 'application/json'},
-                json={
-                    'name': name,
-                    'email': email,
-                    'role_id': int(role_id)
-                }
+                f'{settings.BACKEND_API_URL}/register',
+                headers={
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data=json.dumps(data)
             )
-
+            
             if response.status_code == 201:
                 messages.success(request, 'User created successfully')
             else:
                 messages.error(request, 'Error creating user')
-
+                
         except requests.exceptions.RequestException:
             messages.error(request, 'Connection error')
-        except ValueError:
-            messages.error(request, 'Invalid role ID')
-
+            
     return redirect('users')

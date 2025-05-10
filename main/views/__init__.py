@@ -5,6 +5,7 @@ from .delivery_views import deliveries, create_transport
 from .user_views import users, user_details, add_user
 from .analytics_views import analytics
 from .supply_views import supply
+from .donor_views import donors, add_donor
 
 __all__ = [
     'login', 'logout', 'register', 'change_password',
@@ -13,5 +14,6 @@ __all__ = [
     'deliveries', 'create_transport',
     'users', 'user_details', 'add_user',
     'analytics',
-    'supply'
+    'supply',
+    'donors', 'add_donor'
 ]
