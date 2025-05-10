@@ -30,12 +30,8 @@ def blood_requests(request):
                         8: 'AB+', 9: 'AB-'
                     }
                     for detail in details:
-                        # Debug print to check the response
-                        # print(f"Detail before mapping: {detail}")
                         blood_group_id = detail.get('blood_group_id')
-                        # print(f"Blood group ID: {blood_group_id}")
                         detail['blood_group'] = blood_group_mapping.get(blood_group_id, 'Unknown')
-                        # print(f"Mapped blood group: {detail['blood_group']}")
                     req['part_details'] = details
                 else:
                     req['part_details'] = []

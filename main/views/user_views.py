@@ -1,7 +1,5 @@
 import json
-import time
 import requests
-from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
@@ -52,7 +50,7 @@ def add_user(request):
             "name": name,
             "email": email,
             "password": email,  # Using email as password
-            "role_id": int(role_id)  # Convert to integer
+            "role_id": int(role_id)  
         }
         
         try:

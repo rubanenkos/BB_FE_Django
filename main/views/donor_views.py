@@ -6,22 +6,18 @@ from django.contrib import messages
 from django.conf import settings
 from requests.exceptions import RequestException
 
-def donors(request):
-    response = requests.get(f'{settings.BACKEND_API_URL}/donors')
-    donors = response.json()
-    return render(request, 'main/donors.html', {'donors': donors})
 
-# def donors(request):
-#     try:
-#         response = requests.get(f'{settings.BACKEND_API_URL}/donors')
-#         if response.status_code == 200:
-#             donors = response.json()
-#         else:
-#             donors = []
-#         return render(request, 'main/donors.html', {'donors': donors})
-#     except requests.exceptions.RequestException:
-#         messages.error(request, 'Error fetching donors data')
-#         return render(request, 'main/donors.html', {'donors': []})
+def donors(request):
+    try:
+        response = requests.get(f'{settings.BACKEND_API_URL}/donors')
+        if response.status_code == 200:
+            donors = response.json()
+        else:
+            donors = []
+        return render(request, 'main/donors.html', {'donors': donors})
+    except requests.exceptions.RequestException:
+        messages.error(request, 'Error fetching donors data')
+        return render(request, 'main/donors.html', {'donors': []})
 
 def add_donor(request):
     if request.method == 'POST':
