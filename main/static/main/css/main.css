@@ -98,38 +98,6 @@ main {
     color: white;
 }
 
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f8fcee;
-    width: 100%;
-    margin-left: 0;  /* Remove any margin that might be inherited */
-    position: fixed;  /* Fix the container to viewport */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.login-box {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    z-index: 1000;  /* Ensure login box appears above other elements */
-}
-
-.login-logo {
-    width: 80px;
-    height: auto;
-    display: block;
-    margin: 0 auto 1rem;
-}
-
 .form-group {
     margin-bottom: 1rem;
 }
@@ -179,7 +147,7 @@ main {
     color: #333;
     padding: 10px;
     background: #ffffff;
-    width: calc(280px - 40px); /* aside width minus padding */
+    width: calc(280px - 40px);
 }
 
 .user-info i {
@@ -199,140 +167,9 @@ main {
     border-top: 1px solid #dee2e6;
 }
 
-.about-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.about-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.about-header h1 {
-    color: #e92d0c;
-    margin-bottom: 1rem;
-}
-
-.about-section {
-    margin-bottom: 4rem;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.feature-card {
-    text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.feature-card i {
-    font-size: 2.5rem;
-    color: #e92d0c;
-    margin-bottom: 1rem;
-}
-
-.impact-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.stat-card {
-    text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #e92d0c;
-}
-
-.stat-label {
-    display: block;
-    margin-top: 0.5rem;
-    color: #666;
-}
-
-.lead {
-    font-size: 1.25rem;
-    color: #666;
-}
-
-.user-info {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
-}
-
-.user-info i {
-    margin-right: 10px;
-    margin-top: 3px;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-name {
-    text-decoration: none;
-    color: inherit;
-}
-
-.user-name:hover {
-    color: #e92d0c;
-    text-decoration: underline;
-}
-
-.user-details-container {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.change-password-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.user-role {
-    font-size: 0.8em;
-    color: #666;
-}
-
-.user-details-container .card-body h5 {
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.user-details-container .card-body p.h4 {
-    font-size: 1.125rem;
-    margin-bottom: 0;
-}
-
-.change-password-section h3 {
-    font-size: 1.5rem;
-}
-
 .messages {
     position: fixed;
-    bottom: 20px;  /* Changed from top to bottom */
+    bottom: 20px;
     right: 20px;
     z-index: 1050;
     min-width: 300px;
@@ -367,11 +204,42 @@ main {
 }
 
 .sortable.asc i::before {
-    content: "\f0de";  /* Font Awesome up arrow */
+    content: "\f0de";
 }
 
-.sortable.desc i::before {
-    content: "\f0dd";  /* Font Awesome down arrow */
+sortabl.desc i::before {
+    content: "\f0dd";
+}
+
+.user-info {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.user-info i {
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-name:hover {
+    color: #e92d0c;
+    text-decoration: underline;
+}
+
+.user-role {
+    font-size: 0.8em;
+    color: #666;
 }
 
 .navbar-brand img {

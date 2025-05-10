@@ -1,6 +1,11 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
 {% block title %}User Details{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'main/css/user_details.css' %}">
+{% endblock %}
 
 {% block content %}
 {% if messages %}
